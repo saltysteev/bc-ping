@@ -1,0 +1,2 @@
+pythonping~=1.0.16
+dicttoxml~=1.7.4
