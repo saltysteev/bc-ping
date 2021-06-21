@@ -86,9 +86,9 @@ def change_status(i, dt, online):
     if i['attempt'] >= 2:  # After three conflicting checks in a row, change status
         if online:
             now = datetime.datetime.now()
-            dt_string = now.strftime("%B %d, %Y %-I:%M %p")
+            dt_string = now.strftime("%B %d, %Y %#I:%M %p")
             sql = ''' INSERT INTO events(name,date,duration) VALUES(?,?,?) '''
-            write_db((i['name'], str(dt_string), datetime.timedelta(seconds=(dt - i['time']))), sql)
+            write_db((i['name'], str(dt_string), str(datetime.timedelta(seconds=(dt - i['time'])))), sql)
             update_event_dict()
         i['status'] = 'online' if online else 'offline'
         i['css'] = 'table-success' if online else 'table-danger'

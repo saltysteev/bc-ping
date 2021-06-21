@@ -7,7 +7,7 @@ function getXML() {
     refreshTable(this);
   }
   };
-  xmlhttp.open("GET", "events.xml", true);
+  xmlhttp.open("GET", "event_log.xml", true);
   xmlhttp.send();
 }
 
