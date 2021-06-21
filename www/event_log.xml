@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<root>
+	<events>
+		<item>
+			<name>Charing Cross</name>
+			<date>June 18, 2021 at 12:08:26</date>
+			<duration>1:17:12</duration>
+		</item>
+		<item>
+			<name>Archie</name>
+			<date>June 18, 2021 at 15:06:20</date>
+			<duration>0:02:40</duration>
+		</item>
+		<item>
+			<name>Lyndhurst</name>
+			<date>June 18, 2021 at 15:14:38</date>
+			<duration>400</duration>
+		</item>
+		<item>
+			<name>Test Server</name>
+			<date>June 21, 2021 10:42 AM</date>
+			<duration>0:02:13</duration>
+		</item>
+	</events>
+</root>

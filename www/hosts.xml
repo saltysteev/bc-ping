@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<root>
+	<servers>
+		<item>
+			<name>Google</name>
+			<ip>www.google.com</ip>
+			<address>Google</address>
+			<phone>000-000-000</phone>
+			<time>1624043180</time>
+			<duration>2 days, 22:35:19</duration>
+			<status>online</status>
+			<css>table-success</css>
+			<attempt>0</attempt>
+		</item>
+		<item>
+			<name>Test Server</name>
+			<ip>127.0.0.1</ip>
+			<address>Test Server</address>
+			<phone>000-000-0000</phone>
+			<time>1624286524</time>
+			<duration>2:59:36</duration>
+			<status>online</status>
+			<css>table-success</css>
+			<attempt>0</attempt>
+		</item>
+	</servers>
+</root>
