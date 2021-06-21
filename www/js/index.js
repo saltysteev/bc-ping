@@ -7,7 +7,7 @@ function getXML() {
     refreshTable(this);
   }
   };
-  xmlhttp.open("GET", "dict.xml", true);
+  xmlhttp.open("GET", "hosts.xml", true);
   xmlhttp.send();
 }
 
