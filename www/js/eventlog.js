@@ -45,4 +45,4 @@ function filterFunction() {
 }
 
 getXML();
-var vTimer = setInterval(getXML, 30000);
+var vTimer = setInterval(getXML, 10000);

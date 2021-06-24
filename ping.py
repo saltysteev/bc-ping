@@ -7,7 +7,10 @@ import sys
 import os
 import datetime
 import sqlite3
+import smtplib
+import ssl
 from sqlite3 import Error
+from email.message import EmailMessage
 
 obj = {}
 event_logs = {}
@@ -20,6 +23,13 @@ DATABASE_PATH = cfg.get('PATHS', 'Database')
 XML_PATH = cfg.get('PATHS', 'XML')
 EVENTXML_PATH = cfg.get('PATHS', 'EventLogXML')
 CHECK_INTERVAL = int(cfg.get('TIMER', 'CheckInterval'))
+
+SMTP_SERVER = cfg.get('SMTP', 'Server')
+SMTP_PORT = cfg.get('SMTP', 'Port')
+SMTP_PASS = cfg.get('SMTP', 'Password')
+SMTP_SENDER = cfg.get('SMTP', 'SenderEmail')
+SMTP_RECEIVER = [e.strip() for e in cfg.get('SMTP', 'Receivers').split(',')]
+SMTP_ENABLED = bool(cfg.get('SMTP', 'SendUpdates'))
 
 
 def create_connection(db):
@@ -84,9 +94,9 @@ def write_to_file(path, data):
 def change_status(i, dt, online):
     """ Changing status online or offline """
     if i['attempt'] >= 2:  # After three conflicting checks in a row, change status
-        if online:
-            now = datetime.datetime.now()
-            dt_string = now.strftime("%B %d, %Y %#I:%M %p")
+        now = datetime.datetime.now()
+        dt_string = now.strftime("%B %d, %Y %#I:%M %p")
+        if online:  # We're coming back online, so write an event to know how long it was down
             sql = ''' INSERT INTO events(name,date,duration) VALUES(?,?,?) '''
             write_db((i['name'], str(dt_string), str(datetime.timedelta(seconds=(dt - i['time'])))), sql)
             update_event_dict()
@@ -96,8 +106,40 @@ def change_status(i, dt, online):
         i['attempt'] = 0
         sql = ''' UPDATE servers SET time = ?, status = ?, css = ? WHERE name = ? '''
         write_db((dt, i['status'], i['css'], i['name']), sql)
+        send_alert(i, dt_string, online)
     else:
         i['attempt'] += 1
+
+
+def send_alert(i, dt_string, online):
+    if SMTP_ENABLED:
+        msg = EmailMessage()
+        msg['From'] = SMTP_SENDER
+
+        if online:
+            msg['Subject'] = 'Ping Alert: UP'
+            msg.set_content(f'Host is back online: {i["name"]} has been restored at {dt_string}')
+        else:
+            msg['Subject'] = 'Ping Alert: DOWN'
+            msg.set_content(f'Host is down: {i["name"]} is not replying at {dt_string}')
+
+        context = ssl.create_default_context()
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+
+        try:
+            server.ehlo()
+            server.starttls(context=context)  # Secure the connection
+            server.ehlo()
+            server.login(SMTP_SENDER, SMTP_PASS)
+            for i in SMTP_RECEIVER:
+                msg['To'] = i
+                server.send_message(msg)
+        except Exception as e:
+            print(f'Error sending email: {e}')
+        finally:
+            server.quit()
+    else:
+        pass
 
 
 def monitor_ping(sec):
