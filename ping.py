@@ -9,6 +9,7 @@ import datetime
 import sqlite3
 import smtplib
 import ssl
+import json
 from sqlite3 import Error
 from email.message import EmailMessage
 
@@ -45,7 +46,7 @@ def create_connection(db):
         c.execute('SELECT * FROM servers')
         obj = {'servers': [dict(row) for row in c.fetchall()]}
         c2.execute('SELECT * FROM events')
-        event_logs = {'events': [dict(row) for row in c2.fetchall()]}
+        event_logs = [dict(row) for row in c2.fetchall()]
     except Error as e:
         print(f'Connection error: {e}')
     finally:
@@ -62,7 +63,7 @@ def update_event_dict():
         conn.row_factory = sqlite3.Row
         c = conn.cursor()
         c.execute('SELECT * FROM events')
-        event_logs = {'events': [dict(row) for row in c.fetchall()]}
+        event_logs = [dict(row) for row in c.fetchall()]
     except Error as e:
         print(f'Event update error: {e}')
     finally:
@@ -86,9 +87,15 @@ def write_db(data, sql):
 
 
 def write_to_file(path, data):
-    """ Write to event log or XML file """
+    """ Write to XML file """
     with open(path, 'w') as f:
         f.write(data)
+
+
+def write_json(path, data):
+    """ Write event log json """
+    with open(path, 'w') as f:
+        json.dump(data, f)
 
 
 def change_status(i, dt, online):
@@ -160,8 +167,7 @@ def monitor_ping(sec):
             sql = ''' UPDATE servers SET duration = ?, attempt = ? WHERE name = ? '''
             write_db(((dt - i['time']), i['attempt'], i['name']), sql)  # Writes datetime as seconds for database
         xml = dicttoxml(obj, attr_type=False)
-        eventxml = dicttoxml(event_logs, attr_type=False)
-        write_to_file(EVENTXML_PATH, parseString(eventxml).toprettyxml())
+        write_json(EVENTXML_PATH, event_logs)
         write_to_file(XML_PATH, parseString(xml).toprettyxml())
         time.sleep(sec)
 
