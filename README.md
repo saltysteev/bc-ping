@@ -1,6 +1,9 @@
 # bc-ping
 A self-hosted ping monitoring script to check status of remote hosts/ip with a status page
 
+## screenshot
+![Screenshot](https://imgur.com/qUXtIRg.png)
+
 ## overview
 I was looking for just a simple up/down ping monitor that tells me if it's up or down and some timestamps. Either they were too expensive, or too loaded with unnecessary features. I couldn't believe some companies are charging $50-$100 **a month** to just check the uptime of just a handfull of hosts. So I started writing this and now my company uses it as our daily ping monitor.
 
