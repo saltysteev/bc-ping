@@ -5,22 +5,33 @@
 			<name>Google</name>
 			<ip>www.google.com</ip>
 			<address>Google</address>
-			<phone>000-000-000</phone>
+			<phone>800-234-5678</phone>
 			<time>1624043180</time>
-			<duration>10 days, 20:18:06</duration>
+			<duration>10 days, 22:32:03</duration>
 			<status>online</status>
 			<css>table-success</css>
 			<attempt>0</attempt>
 		</item>
 		<item>
-			<name>Test Server</name>
+			<name>Offline Test</name>
 			<ip>10.10.10.10</ip>
-			<address>Test Server</address>
+			<address>123 Rainbow Road</address>
 			<phone>000-000-0000</phone>
 			<time>1624556460</time>
-			<duration>4 days, 21:43:26</duration>
+			<duration>4 days, 23:57:23</duration>
 			<status>offline</status>
 			<css>table-danger</css>
+			<attempt>0</attempt>
+		</item>
+		<item>
+			<name>Apple</name>
+			<ip>www.apple.com</ip>
+			<address>Apple</address>
+			<phone>800-123-4567</phone>
+			<time>0</time>
+			<duration>18807 days, 17:38:26</duration>
+			<status>online</status>
+			<css>table-success</css>
 			<attempt>0</attempt>
 		</item>
 	</servers>
