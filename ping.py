@@ -22,7 +22,7 @@ cfg.read(cpath)
 
 DATABASE_PATH = cfg.get('PATHS', 'Database')
 XML_PATH = cfg.get('PATHS', 'XML')
-EVENTXML_PATH = cfg.get('PATHS', 'EventLogXML')
+EVENT_PATH = cfg.get('PATHS', 'EventLog')
 CHECK_INTERVAL = int(cfg.get('TIMER', 'CheckInterval'))
 
 SMTP_SERVER = cfg.get('SMTP', 'Server')
@@ -167,7 +167,7 @@ def monitor_ping(sec):
             sql = ''' UPDATE servers SET duration = ?, attempt = ? WHERE name = ? '''
             write_db(((dt - i['time']), i['attempt'], i['name']), sql)  # Writes datetime as seconds for database
         xml = dicttoxml(obj, attr_type=False)
-        write_json(EVENTXML_PATH, event_logs)
+        write_json(EVENT_PATH, event_logs)
         write_to_file(XML_PATH, parseString(xml).toprettyxml())
         time.sleep(sec)
 
